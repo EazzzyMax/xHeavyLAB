@@ -8,14 +8,13 @@ class MyP { //класс хранящий массивы
     int[] factor; //множители
 
 
-    public MyP() {
+    public MyP() { //пустой конструктор
     }
 
     public MyP Summ(MyP second) {
         MyP q = this;
         for (int i = 0; i<this.counts.length; i++) {
             for (int j = 0; j<second.counts.length; i++) {
-                if
             }
         }
 
