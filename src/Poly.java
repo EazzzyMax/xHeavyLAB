@@ -1,6 +1,4 @@
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 class Poly { //класс хранящий массивы
     int[] counts; //степени по убыванию
@@ -15,197 +13,15 @@ class Poly { //класс хранящий массивы
     }
 
 
-    public Integer NewN(Poly s) { //размер нового полинома. f - first, s - second (полиномы)
-        Poly f = this;
-        int n = 0;
-        int flast = f.counts.length - 1;
-        int slast = s.counts.length - 1;
-        int fu = 0;
-        int su = 0;
-        while (fu <= flast || su <= slast) {
-            if (fu <= flast) {
-                if (su > slast || f.counts[fu] > s.counts[su]) {
-                    n++;
-                    fu++;
-                    continue;
-                }
-            }
-            if (su <= slast) {
-                if (fu > flast || f.counts[fu] < s.counts[su]) {
-                    n++;
-                    su++;
-                    continue;
-                }
-            }
-            if (fu <= flast && su <= slast) {
-                if (f.counts[fu] == s.counts[su]) {
-                    n++;
-                    fu++;
-                    su++;
-                }
-            }
-        }
-        return n;
-    }
+    public static int[] trans(Poly sec) {       //из двух массивов в 1. так легче сделать деление и иногда ввести полином
+        int maxs = sec.counts[0];               //максимальная степень
+        int[] s = new int[maxs + 1];            //массив хранящий коэфиценты (факторы) всех одночленов в тч нулевых
+        int n = 0;                              //для пробегания по двум старым массивам (с остановками)
+        for (int i = 0; i <= maxs; i++) {       //i для пробегания нового массива (без остановок)
+            if (maxs - i == sec.counts[n]) {    //max-i - степень по ячейке i. maxs 10. i 1. -> вторая ячейка степень 9. vVv
+                s[i] = sec.factor[n];           //и если эта степень соответствует степени в оригинале, то записывается значение, иначе 0
 
-    public Poly Summ(Poly s) {
-        Poly f = this;
-        int n = f.NewN(s);
-
-        Poly t = new Poly();//third
-        t.counts = new int[n];
-        t.factor = new int[n];
-
-        int flast = f.counts.length - 1;
-        int slast = s.counts.length - 1;
-        int fu = 0;
-        int su = 0;
-        n = 0;
-        while (fu <= flast || su <= slast) {
-            if (fu <= flast) {
-                if (su > slast || f.counts[fu] > s.counts[su]) {
-                    t.counts[n] = f.counts[fu];
-                    t.factor[n] = f.factor[fu];
-                    n++;
-                    fu++;
-                    continue;
-                }
-            }
-            if (su <= slast) {
-                if (fu > flast || f.counts[fu] < s.counts[su]) {
-                    t.counts[n] = s.counts[su];
-                    t.factor[n] = s.factor[su];
-                    n++;
-                    su++;
-                    continue;
-                }
-            }
-            if (fu <= flast && su <= slast) {
-                if (f.counts[fu] == s.counts[su]) {
-                    t.counts[n] = s.counts[su];
-                    t.factor[n] = s.factor[su] + f.factor[fu];
-                    n++;
-                    fu++;
-                    su++;
-                }
-            }
-        }
-
-
-        return t;
-
-    }
-
-    public Poly Res(Poly s) {
-        Poly f = this;
-        int n = f.NewN(s);
-
-        Poly t = new Poly();//third
-        t.counts = new int[n];
-        t.factor = new int[n];
-
-        int flast = f.counts.length - 1;
-        int slast = s.counts.length - 1;
-        int fu = 0;
-        int su = 0;
-        n = 0;
-        while (fu <= flast || su <= slast) {
-            if (fu <= flast) {
-                if (su > slast || f.counts[fu] > s.counts[su]) {
-                    t.counts[n] = f.counts[fu];
-                    t.factor[n] = f.factor[fu];
-                    n++;
-                    fu++;
-                    continue;
-                }
-            }
-            if (su <= slast) {
-                if (fu > flast || f.counts[fu] < s.counts[su]) {
-                    t.counts[n] = s.counts[su];
-                    t.factor[n] = -s.factor[su];
-                    n++;
-                    su++;
-                    continue;
-                }
-            }
-            if (fu <= flast && su <= slast) {
-                if (f.counts[fu] == s.counts[su]) {
-                    t.counts[n] = s.counts[su];
-                    t.factor[n] = s.factor[su] - f.factor[fu];
-                    n++;
-                    fu++;
-                    su++;
-                }
-            }
-        }
-
-
-        return t;
-
-    }
-
-    public Poly Mult(Poly s) {    //полноценное умножение                                          //умножение VVVVVVVVV
-        Poly f = this;
-        int fn = f.counts.length; //размер first
-        int sn = s.counts.length; //размер second
-        int n = fn * sn;  //максимальный размер нового
-        int[] nCounts = new int[n];
-        int[] nFactor = new int[n]; //!!!!!! факторы которые надо собрать в кучу. ПРИВЯЗАН К nCounts
-        n = 0;
-        for (int i = 0; i < fn; i++) {        //все подряд шоб картина была
-            for (int j = 0; j < sn; j++) {
-                nCounts[n] = f.counts[i] + s.counts[j];
-                nFactor[n] = f.factor[i] * s.factor[j];
-                n++;
-            }
-        }
-
-        Set<Integer> mySet = new HashSet<>();
-        for (int q : nCounts) {       //удаляю дубликаты
-            mySet.add(q);
-        }
-
-
-        Poly who = new Poly();                //массив для ретёрна
-        who.counts = new int[mySet.size()];   //из сета будет массив (степеней)
-        who.factor = new int[mySet.size()];   //а это факторы будут
-
-        int i = 0;
-        for (int q : mySet) {                 //сет -> массив
-            who.counts[i] = q;
-            i++;
-        }
-
-        Arrays.sort(who.counts);             //сортировка по возрастанию
-        for (i = 0; i < who.counts.length / 2; i++) {  //переворот
-            int tmp = who.counts[i];
-            who.counts[i] = who.counts[who.counts.length - i - 1];
-            who.counts[who.counts.length - i - 1] = tmp;
-        }
-
-
-        for (i = 0; i < who.counts.length; i++) { //тут буду пихать факторы для конечного вывода
-            int cou = who.counts[i];
-            for (int j = 0; j < nCounts.length; j++) {
-                if (cou == nCounts[j]) {
-                    who.factor[i] += nFactor[j];
-                }
-            }
-        }
-
-        return who;
-    }                                                                                      //умножение ^^^^^^^^^^^^^^^^^
-
-
-    public static int[] trans(Poly sec) {  //из двух массивов в 1. так легче сделать деление и иногда ввести полином
-        int maxs = sec.counts[0];    //максимальная степень
-        int[] s = new int[maxs + 1]; //массив хранящий коэфиценты (факторы) всех одночленов в тч нулевых
-        int n = 0;                   //для пробегания по двум старым массивам (с остановками)
-        for (int i = 0; i <= maxs; i++) { //i для пробегания нового массива (без остановок)
-            if (maxs - i == sec.counts[n]) {   //max-i - степень по ячейке i. maxs 10. i 1. -> вторая ячейка степень 9. vVv
-                s[i] = sec.factor[n]; //и если эта степень соответствует степени в оригинале, то записывается значение, иначе 0
-
-                n++; //следующая ячейка в старом массиве
+                n++;                            //следующая ячейка в старом массиве
             }
             if (n == sec.counts.length) break;
         }
@@ -237,6 +53,61 @@ class Poly { //класс хранящий массивы
         return back;
     }
 
+    public Poly summ(Poly sec) {
+        int[] f = trans(this);
+        int[] s = trans(sec);
+        int d = f.length - s.length;
+        if (d >= 0) {
+            for (int i = 0; i < s.length; i++) {
+                f[d + i] += s[i];
+            }
+            return transBack(f);
+        } else {
+            d = -d;
+            for (int i = 0; i < f.length; i++) {
+                s[d + i] += f[i];
+            }
+            return transBack(s);
+        }
+
+    }
+
+    public Poly Res(Poly sec) {
+        int[] f = trans(this);
+        int[] s = trans(sec);
+        int d = f.length - s.length;
+        if (d >= 0) {
+            for (int i = 0; i < s.length; i++) {
+                f[d + i] -= s[i];
+            }
+            return transBack(f);
+        } else {
+            d = -d;
+            for (int i = 0; i < f.length; i++) {
+                s[d + i] -= f[i];
+            }
+            return transBack(s);
+        }
+
+    }
+
+    public Poly mult(Poly sec) {                                                         //умножение vvvvvvvvvvvv
+        int[] f = trans(this);
+        int[] s = trans(sec);
+        int n = f.length + s.length - 1;
+        int[] ans = new int[n];
+
+        for (int i = 0; i < f.length; i++) {
+            for (int j = 0; j < s.length; j++) {
+                ans[i+j] += f[i] * s[j];
+            }
+
+        }
+        return transBack(ans);
+    }                                                                                      //умножение ^^^^^^^^^^^^^^^^^
+
+
+
     public Poly delenie(Poly sec) { //                                        деление VVVVVV
         int[] f = trans(this);      //!!!! f делится на s !!!!
         int[] s = trans(sec);
@@ -267,9 +138,9 @@ class Poly { //класс хранящий массивы
 
 //        System.out.println(Arrays.toString(trans(first.delenie(second))));
 
-        Poly one = transBack(new int[]{1,0,0,0,0,1,10,50,0,0,0,0,0,0});
-        Poly dva = transBack(new int[]{1,2,3,4,5});
-        Poly ans = one.delenie(dva);
+        Poly one = transBack(new int[]{5, 4, 3, 3, 0, 0});
+        Poly dva = transBack(new int[]{1, 2, 3, 4, 5});
+        Poly ans = dva.mult(one);
 
         System.out.println(Arrays.toString(one.counts));
         System.out.println(Arrays.toString(one.factor));
@@ -278,7 +149,6 @@ class Poly { //класс хранящий массивы
         System.out.println(Arrays.toString(dva.counts));
         System.out.println(Arrays.toString(dva.factor));
         System.out.println("");
-
 
         System.out.println(Arrays.toString(ans.counts));
         System.out.println(Arrays.toString(ans.factor));
