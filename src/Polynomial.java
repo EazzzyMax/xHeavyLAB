@@ -8,12 +8,12 @@ class Polynomial { //класс хранящий массивы
     public Polynomial() { //пустой конструктор
     }
 
-    public Polynomial(int[] cou, double[] fac) {
+    public Polynomial(int[] cou, double[] fac) { //конструктор через два массива
         this.counts = cou;
         this.factor = fac;
     }
 
-    public Polynomial(double[] all) {
+    public Polynomial(double[] all) {   //конструктор через 1 массив
         Polynomial a = transBack(all);
         this.counts = a.counts;
         this.factor = a.factor;
@@ -150,22 +150,4 @@ class Polynomial { //класс хранящий массивы
         return transBack(a);
     }
 
-    public static void main(String[] args) {
-
-        Polynomial first = new Polynomial();
-        first.counts = new int[]{4, 3, 1, 0};
-        first.factor = new double[]{3, 5, 2, 4};
-
-        Polynomial second = new Polynomial();
-        second.counts = new int[]{2, 1, 0};
-        second.factor = new double[]{1, 2, 1};
-
-
-        Polynomial one = transBack(new double[]{1, 2, 3, 4, 5});
-        Polynomial dva = transBack(new double[]{1, 2, 3, 4, 5,1});
-
-        System.out.println(one.isEqual(dva));
-
-
-    }
 }
