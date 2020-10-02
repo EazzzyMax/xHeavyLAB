@@ -9,7 +9,14 @@ class Poly { //класс хранящий массивы
     }
 
     public Poly(int[] cou, int[] fac) {
+        this.counts = cou;
+        this.factor = fac;
+    }
 
+    public Poly (int [] all) {
+        Poly a = transBack(all);
+        this.counts = a.counts;
+        this.factor = a.factor;
     }
 
 
@@ -72,7 +79,7 @@ class Poly { //класс хранящий массивы
 
     }
 
-    public Poly Res(Poly sec) {
+    public Poly res(Poly sec) {
         int[] f = trans(this);
         int[] s = trans(sec);
         int d = f.length - s.length;
