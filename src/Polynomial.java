@@ -5,7 +5,6 @@ class Polynomial { //класс хранящий массивы
     double[] factor; //множители
 
 
-
     public Polynomial() { //пустой конструктор
     }
 
@@ -18,6 +17,10 @@ class Polynomial { //класс хранящий массивы
         Polynomial a = transBack(all);
         this.counts = a.counts;
         this.factor = a.factor;
+    }
+
+    public boolean isEqual(Polynomial sec) {
+        return (this.toString().equals(sec.toString()));
     }
 
     public String toString() {
@@ -158,8 +161,10 @@ class Polynomial { //класс хранящий массивы
         second.factor = new double[]{1, 2, 1};
 
 
-        Polynomial one = transBack(new double[]{5, 4, 3, 3, 0, 0});
-        Polynomial dva = transBack(new double[]{1, 2, 3, 4, 5});
+        Polynomial one = transBack(new double[]{1, 2, 3, 4, 5});
+        Polynomial dva = transBack(new double[]{1, 2, 3, 4, 5,1});
+
+        System.out.println(one.isEqual(dva));
 
 
     }
