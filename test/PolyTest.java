@@ -111,15 +111,13 @@ class PolyTest {
         Poly a13 = p1;
         Poly a14 = new Poly(new double[]{2, 0, 0, 0, 0.8, 1, 0.8, 0.6, 0.4, 0.2, 0, 0});
         Poly a23 = new Poly(new double[]{1, 2, 3, 4, 5});
-        Poly a24 = new Poly(new double[]{499995, 0, 0, 0, 5, 10, 15, 20, 25, 0});
-        Poly a34 = new Poly(new double[]{5, 0});
+        Poly a24 = new Poly(new double[]{0.2, 0.4, 0.6, 0.8});
 
 
         Assert.assertEquals(Arrays.toString(Poly.trans(a12)), Arrays.toString(Poly.trans(ans12)));
         Assert.assertEquals(Arrays.toString(Poly.trans(a13)), Arrays.toString(Poly.trans(ans13)));
         Assert.assertEquals(Arrays.toString(Poly.trans(a14)), Arrays.toString(Poly.trans(ans14)));
         Assert.assertEquals(Arrays.toString(Poly.trans(a23)), Arrays.toString(Poly.trans(ans23)));
-//        Assert.assertEquals(Arrays.toString(Poly.trans(a24)), Arrays.toString(Poly.trans(ans24)));
-//        Assert.assertEquals(Arrays.toString(Poly.trans(a34)), Arrays.toString(Poly.trans(ans34)));
+        Assert.assertEquals(Arrays.toString(Poly.trans(a24)), Arrays.toString(Poly.trans(ans24)));
     }
 }
